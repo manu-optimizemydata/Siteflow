@@ -309,6 +309,7 @@ export function EstimatesScreen() {
 export function EstimateDetail({ estimateId }: { estimateId: string }) {
   const query = useDatabase();
   const actor = useActor();
+  const router = useRouter();
   const estimate = query.data?.estimates.find((item) => item.id === estimateId);
   const [items, setItems] = useState<BOQItem[] | null>(null);
   const [contingency, setContingency] = useState<number | null>(null);
@@ -319,7 +320,7 @@ export function EstimateDetail({ estimateId }: { estimateId: string }) {
   const totals = calculateEstimateTotals(current, percent);
   return (
     <div>
-      <PageHeader title={estimate.title} eyebrow={estimate.code} description="Line totals, tax, and contingency are calculated here. Tax is a configurable field, not advice." crumbs={[{ href: "/crm/estimates", label: "Estimates" }]} actions={<Button onClick={() => void createQuotationFromEstimate(estimate.id, actor.actorId).then((id) => { toast.success("Quotation drafted"); window.location.href = `/crm/quotations/${id}`; }).catch((error: Error) => toast.error(error.message))}>Create quotation</Button>} />
+      <PageHeader title={estimate.title} eyebrow={estimate.code} description="Line totals, tax, and contingency are calculated here. Tax is a configurable field, not advice." crumbs={[{ href: "/crm/estimates", label: "Estimates" }]} actions={<Button onClick={() => void createQuotationFromEstimate(estimate.id, actor.actorId).then((id) => { toast.success("Quotation drafted"); router.push(`/crm/quotations/${id}`); }).catch((error: Error) => toast.error(error.message))}>Create quotation</Button>} />
       <div className="overflow-x-auto rounded-2xl border border-border bg-card">
         <table className="w-full min-w-[720px] text-sm">
           <thead className="text-left text-muted-foreground"><tr><th className="p-3">Description</th><th>Unit</th><th>Qty</th><th>Rate</th><th>Tax %</th><th>Amount</th></tr></thead>
